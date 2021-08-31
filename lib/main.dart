@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text(widget.title),
       ),
@@ -100,7 +100,6 @@ class _MyHomePageState extends State<MyHomePage> {
                             TextFormField(
                               obscureText: !_passwordVisible,
                               decoration: InputDecoration(
-                                // filled: true,
                                 hintText: "Senha",
                                 suffixIcon: IconButton(
                                   onPressed: () {

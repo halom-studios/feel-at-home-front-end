@@ -60,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(widget.title),
       ),

@@ -31,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
           children: <Widget>[
             Card(
               margin: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.05,
+                  horizontal: MediaQuery.of(context).size.width * 0.1,
                   vertical: MediaQuery.of(context).size.height * 0.1),
               child: Padding(
                 padding: EdgeInsets.all(16.0),
@@ -106,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     Container(
                       height: 60,
-                      alignment: Alignment.centerLeft,
+                      alignment: Alignment.center,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.topLeft,
@@ -124,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: SizedBox.expand(
                         child: TextButton(
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Text(
                                 "Login",

@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -8,29 +10,83 @@ class DonationPage extends StatefulWidget {
   _DonationPageState createState() => _DonationPageState();
 }
 
-class Doacao {
+class Endereco {
+  final String logradouro;
+  final String cep;
+  final String estado;
+  final String cidade;
+
+  Map<String, dynamic> toJson() => {
+        'logradouro': logradouro,
+        'cep': cep,
+        'estado': estado,
+        'cidade': cidade,
+      };
+
+  Endereco(this.logradouro, this.cep, this.estado, this.cidade);
+}
+
+class Doador {
   final String nome;
   final String email;
   final String telefone;
+  final Endereco endereco;
 
-  Doacao(
-    this.nome,
-    this.email,
-    this.telefone,
-  );
+  Map<String, dynamic> toJson() => {
+        'nome': nome,
+        'email': email,
+        'telefone': telefone,
+        'endereco': endereco,
+      };
+
+  Doador(this.nome, this.email, this.telefone, this.endereco);
+}
+
+class Doacao {
+  final Doador doador;
+  final String instituicao = "3fa85f64-5717-4562-b3fc-2c963f66afa6";
+  final int tipoDoacao = 0;
+  final String valor;
+
+  Map<String, dynamic> toJson() => {
+        'doador': doador,
+        'instituicao': instituicao,
+        'tipoDoacao': tipoDoacao,
+        'valor': valor,
+      };
+
+  Doacao(this.doador, this.valor);
+}
+
+Future<String> sendDonation(Doacao doacao) async {
+  var bodyJson = json.encode(doacao);
+  print(bodyJson);
+
+  final response = await http.post(Uri.parse('localhost:5001'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: bodyJson);
+
+  if (response.statusCode == 201) {
+    return response.body;
+  } else {
+    return "Falha ao fazer a doação ${response.statusCode}";
+  }
 }
 
 class _DonationPageState extends State<DonationPage> {
   final _formKey = GlobalKey<FormState>();
 
-  void _visiblePass() {
-    setState(() {});
-  }
-
   final TextEditingController _controladorNome = TextEditingController();
   final TextEditingController _controladorEmail = TextEditingController();
   final TextEditingController _controladorTelefone = TextEditingController();
   final TextEditingController _controladorEndereco = TextEditingController();
+  final TextEditingController _controladorLogradouro = TextEditingController();
+  final TextEditingController _controladorCep = TextEditingController();
+  final TextEditingController _controladorEstado = TextEditingController();
+  final TextEditingController _controladorCidade = TextEditingController();
+  final TextEditingController _controladorValor = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -120,10 +176,10 @@ class _DonationPageState extends State<DonationPage> {
                         height: 10,
                       ),
                       TextFormField(
-                        controller: _controladorEndereco,
+                        controller: _controladorLogradouro,
                         keyboardType: TextInputType.streetAddress,
                         decoration: InputDecoration(
-                          labelText: "Endereço",
+                          labelText: "Logradouro",
                           hintText: '',
                           labelStyle: TextStyle(
                             color: Colors.black38,
@@ -134,7 +190,99 @@ class _DonationPageState extends State<DonationPage> {
                         style: TextStyle(fontSize: 20),
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
-                            return 'Por favor digite seu estado';
+                            return 'Por favor digite um endereço válido';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        controller: _controladorCep,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: "CEP",
+                          hintText: '',
+                          labelStyle: TextStyle(
+                            color: Colors.black38,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 20,
+                          ),
+                        ),
+                        style: TextStyle(fontSize: 20),
+                        validator: (String? value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor digite um endereço válido';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        controller: _controladorEstado,
+                        keyboardType: TextInputType.streetAddress,
+                        decoration: InputDecoration(
+                          labelText: "Estado",
+                          hintText: '',
+                          labelStyle: TextStyle(
+                            color: Colors.black38,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 20,
+                          ),
+                        ),
+                        style: TextStyle(fontSize: 20),
+                        validator: (String? value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor digite um endereço válido';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        controller: _controladorCidade,
+                        keyboardType: TextInputType.streetAddress,
+                        decoration: InputDecoration(
+                          labelText: "Cidade",
+                          hintText: '',
+                          labelStyle: TextStyle(
+                            color: Colors.black38,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 20,
+                          ),
+                        ),
+                        style: TextStyle(fontSize: 20),
+                        validator: (String? value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor digite um endereço válido';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        controller: _controladorValor,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: "Valor",
+                          hintText: 'Valor em R\$ a ser doado',
+                          labelStyle: TextStyle(
+                            color: Colors.black38,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 20,
+                          ),
+                        ),
+                        style: TextStyle(fontSize: 20),
+                        validator: (String? value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor digite o quanto irá doar';
                           }
                           return null;
                         },
@@ -179,13 +327,28 @@ class _DonationPageState extends State<DonationPage> {
                               if (_formKey.currentState!.validate()) {
                                 final String nome = _controladorNome.text;
                                 final String email = _controladorEmail.text;
-                                final String telefone = _controladorTelefone.text;
-                                final String endereco = _controladorEndereco.text;
+                                final String telefone =
+                                    _controladorTelefone.text;
+                                final String logradouro =
+                                    _controladorLogradouro.text;
+                                final String cep = _controladorCep.text;
+                                final String estado = _controladorEstado.text;
+                                final String cidade = _controladorCidade.text;
+                                final String valor = _controladorValor.text;
+
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                      content: Text('Obrigado pela sua doação!')),
+                                      content:
+                                          Text('Obrigado pela sua doação!')),
                                 );
-                                print('$nome');
+
+                                var endereco =
+                                    Endereco(logradouro, cep, estado, cidade);
+                                var doador =
+                                    Doador(nome, email, telefone, endereco);
+                                var doacao = Doacao(doador, valor);
+
+                                print(sendDonation(doacao));
                               }
                             },
                           ),

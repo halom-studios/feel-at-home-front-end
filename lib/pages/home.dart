@@ -1,7 +1,6 @@
 import 'package:feel_at_home_front_end/pages/donation.dart';
 import 'package:feel_at_home_front_end/pages/login.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -10,25 +9,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class Doacao {
-  final String nome;
-  final String email;
-  final String telefone;
-
-  Doacao(
-    this.nome,
-    this.email,
-    this.telefone,
-  );
-}
-
 class _HomePageState extends State<HomePage> {
-  final _formKey = GlobalKey<FormState>();
-
-  void _visiblePass() {
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,7 +79,7 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(
                         height: 10,
                       ),
-Container(
+                      Container(
                         height: 60,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
@@ -142,7 +123,6 @@ Container(
                           ),
                         ),
                       ),
-
                     ],
                   ),
                 ),

@@ -1,28 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class LoginPage extends StatefulWidget {
-  LoginPage({Key? key}) : super(key: key);
+class DonationPage extends StatefulWidget {
+  DonationPage({Key? key}) : super(key: key);
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _DonationPageState createState() => _DonationPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class Doacao {
+  final String nome;
+  final String email;
+  final String telefone;
+
+  Doacao(
+    this.nome,
+    this.email,
+    this.telefone,
+  );
+}
+
+class _DonationPageState extends State<DonationPage> {
   final _formKey = GlobalKey<FormState>();
-  bool _passwordVisible = false;
 
   void _visiblePass() {
-    setState(() {
-      _passwordVisible = !_passwordVisible;
-    });
+    setState(() {});
   }
+
+  final TextEditingController _controladorNome = TextEditingController();
+  final TextEditingController _controladorEmail = TextEditingController();
+  final TextEditingController _controladorTelefone = TextEditingController();
+  final TextEditingController _controladorEndereco = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Feel at home",
+          "Formulário de doação",
           style: TextStyle(fontSize: 20, color: Colors.white),
         ),
       ),
@@ -42,10 +57,11 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       TextFormField(
-                        keyboardType: TextInputType.emailAddress,
+                        controller: _controladorNome,
+                        keyboardType: TextInputType.name,
                         decoration: InputDecoration(
-                          labelText: "E-mail",
-                          hintText: 'digite o e-mail cadastrado',
+                          labelText: "Nome",
+                          hintText: 'Por favor preencha com seu nome',
                           labelStyle: TextStyle(
                             color: Colors.black38,
                             fontWeight: FontWeight.w400,
@@ -55,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextStyle(fontSize: 20),
                         validator: (String? value) {
                           if (value == null || value.isEmpty) {
-                            return 'Por favor digite um email válido';
+                            return 'Por favor digite seu nome';
                           }
                           return null;
                         },
@@ -64,45 +80,64 @@ class _LoginPageState extends State<LoginPage> {
                         height: 10,
                       ),
                       TextFormField(
-                        // autofocus: true,
-                        keyboardType: TextInputType.text,
-                        obscureText: !_passwordVisible,
+                        controller: _controladorEmail,
+                        keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
-                          labelText: "Senha",
-                          hintText: "Digite sua senha",
+                          labelText: "E-mail",
+                          hintText: 'Um e-mail válido',
                           labelStyle: TextStyle(
                             color: Colors.black38,
                             fontWeight: FontWeight.w400,
                             fontSize: 20,
                           ),
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              _visiblePass();
-                            },
-                            icon: Icon(_passwordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off),
+                        ),
+                        style: TextStyle(fontSize: 20),
+                        validator: (String? value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor digite um e-mail';
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        controller: _controladorTelefone,
+                        keyboardType: TextInputType.phone,
+                        decoration: InputDecoration(
+                          labelText: "Telefone",
+                          hintText: 'Numero de telefone',
+                          labelStyle: TextStyle(
+                            color: Colors.black38,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 20,
                           ),
                         ),
                         style: TextStyle(fontSize: 20),
                       ),
-                      Container(
-                        height: 40,
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          child: Text(
-                            "Recuperar Senha",
-                            textAlign: TextAlign.right,
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextFormField(
+                        controller: _controladorEndereco,
+                        keyboardType: TextInputType.streetAddress,
+                        decoration: InputDecoration(
+                          labelText: "Endereço",
+                          hintText: '',
+                          labelStyle: TextStyle(
+                            color: Colors.black38,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 20,
                           ),
-                          onPressed: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => ResetPasswordPage(),
-                            //   ),
-                            // );
-                          },
                         ),
+                        style: TextStyle(fontSize: 20),
+                        validator: (String? value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Por favor digite seu estado';
+                          }
+                          return null;
+                        },
                       ),
                       SizedBox(
                         height: 40,
@@ -130,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  "Login",
+                                  "Criar",
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
@@ -141,14 +176,16 @@ class _LoginPageState extends State<LoginPage> {
                               ],
                             ),
                             onPressed: () {
-                              // Validate returns true if the form is valid, or false otherwise.
                               if (_formKey.currentState!.validate()) {
-                                // If the form is valid, display a snackbar. In the real world,
-                                // you'd often call a server or save the information in a database.
+                                final String nome = _controladorNome.text;
+                                final String email = _controladorEmail.text;
+                                final String telefone = _controladorTelefone.text;
+                                final String endereco = _controladorEndereco.text;
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                      content: Text('Processing Data')),
+                                      content: Text('Obrigado pela sua doação!')),
                                 );
+                                print('$nome');
                               }
                             },
                           ),
@@ -156,23 +193,6 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       SizedBox(
                         height: 10,
-                      ),
-                      Container(
-                        height: 40,
-                        child: TextButton(
-                          child: Text(
-                            "Cadastre-se",
-                            textAlign: TextAlign.center,
-                          ),
-                          onPressed: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => SignupPage(),
-                            //   ),
-                            // );
-                          },
-                        ),
                       ),
                     ],
                   ),

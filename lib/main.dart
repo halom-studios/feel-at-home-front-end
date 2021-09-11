@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:feel_at_home_front_end/pages/login.dart';
+import 'package:feel_at_home_front_end/pages/donation.dart';
 
 void main() => runApp(MyApp());
 
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
             buttonColor: Colors.yellow,
             textTheme: ButtonTextTheme.primary,
           )),
-      home: LoginPage(),
+      home: DonationPage(),
     );
   }
 }

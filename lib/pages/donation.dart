@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 class DonationPage extends StatefulWidget {
   DonationPage({Key? key}) : super(key: key);
@@ -58,18 +59,29 @@ class Doacao {
   Doacao(this.doador, this.valor);
 }
 
+void getHttp() async {
+  try {
+    var response = await Dio().get('http://www.google.com');
+    print(response);
+  } catch (e) {
+    print(e);
+  }
+}
+
 Future<String> sendDonation(Doacao doacao) async {
   var bodyJson = json.encode(doacao);
   print(bodyJson);
 
-  final response = await http.post(Uri.parse('localhost:5001'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: bodyJson);
+  // final response = await http.post(Uri.parse('https://localhost:5001/api/doacao'),
+  //     headers: <String, String>{
+  //       'Content-Type': 'application/json; charset=UTF-8',
+  //     },
+  //     body: bodyJson);
+  
+  final response = await Dio().get('http://www.google.com');
 
   if (response.statusCode == 201) {
-    return response.body;
+    return response.data;
   } else {
     return "Falha ao fazer a doação ${response.statusCode}";
   }
@@ -349,6 +361,8 @@ class _DonationPageState extends State<DonationPage> {
                                 var doacao = Doacao(doador, valor);
 
                                 print(sendDonation(doacao));
+                              } else {
+                                getHttp();
                               }
                             },
                           ),
